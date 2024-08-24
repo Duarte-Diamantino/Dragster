@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+  <title>ESP Web Server</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+
+  <style>
+    html {font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; display: inline-block; text-align: center; background-color: #fffff2;}
+    h2 {font-size: 3.0rem; color: #000000;}
+    p {font-size: 3.0rem; color: #000000;}
+    body {max-width: 1000px; margin:0px auto; padding-bottom: 25px;}
+    .switch {position: relative; display: inline-block; width: 120px; height: 68px} 
+    .switch input {display: none}
+    .slider {position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; border-radius: 6px}
+    .slider:before {position: absolute; content: ""; height: 52px; width: 52px; left: 8px; bottom: 8px; background-color: #fff; -webkit-transition: .4s; transition: .4s; border-radius: 3px}
+    input:checked+.slider {background-color: #b30000}
+    input:checked+.slider:before {-webkit-transform: translateX(52px); -ms-transform: translateX(52px); transform: translateX(52px)}
+    .slider2 { -webkit-appearance: none; margin: 14px; width: 600px; height: 25px; background: linear-gradient(90deg, #1aa305, #d6c61a, #b30000);
+      outline: none; -webkit-transition: .2s; transition: opacity .2s; border-radius: 15px;}
+    .slider2::-webkit-slider-thumb {-webkit-appearance: none; appearance: none; width: 15px; height: 40px; background: #000000; cursor: pointer; border-radius: 20px;}
+    .slider2::-moz-range-thumb { width: 35px; height: 35px; background: #003249; cursor: pointer; }
+  </style>
+
+</head>
+<body>
+  <h2>ESP Web Server</h2>
+  <p><button type="button" id="2"><h4>Calibration</h4></button></p>
+  %BUTTONPLACEHOLDER%
+  <p><input type="range" onchange="updateSliderPWM(this)" id="pwmSlider" min="0" max="100" value="%SLIDERVALUE%" step="1" class="slider2"></p>
+  <p><span id="textSliderValue">%SLIDERVALUE%</span>%</p>
+
+<script>
+
+function toggleCheckbox(element) {
+  var xhr = new XMLHttpRequest();
+  if(element.checked){ xhr.open("GET", "/update?output="+element.id+"&state=1", true); }
+  else { xhr.open("GET", "/update?output="+element.id+"&state=0", true); }
+  xhr.send();
+}
+
+function updateSliderPWM(element) {
+  var sliderValue = document.getElementById("pwmSlider").value;
+  document.getElementById("textSliderValue").innerHTML = sliderValue;
+  console.log(sliderValue);
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "/slider?value="+sliderValue, true);
+  xhr.send();
+}
+
+</script>
+</body>
+</html>
